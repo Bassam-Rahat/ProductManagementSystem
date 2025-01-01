@@ -19,14 +19,12 @@ namespace PMS.API.Infrastructure.Extensions
 
             app.MapPut("/api/products", async (IMediator mediator, UpdateProductCommand command) =>
             {
-                await mediator.Send(command);
-                return Results.Ok();
+                return Results.Ok(await mediator.Send(command));
             });
 
             app.MapDelete("/api/products/{id}", async (IMediator mediator, Guid id) =>
             {
-                await mediator.Send(new DeleteProductCommand { Id = id });
-                return Results.Ok();
+                return Results.Ok(await mediator.Send(new DeleteProductCommand { Id = id }));
             });
         }
     }

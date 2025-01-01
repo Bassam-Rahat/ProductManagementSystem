@@ -6,6 +6,18 @@ try
     Log.Information("Host started");
     var builder = WebApplication.CreateBuilder(args);
 
+    const string AllowSpecificOrigins = "_allowSpecificOrigins";
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: AllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+    });
+
     builder.Services
         .ConfigureOptions(builder.Configuration)
         .ConfigureServices(builder.Configuration)
@@ -28,6 +40,7 @@ try
     builder.Services.AddControllers();
 
     var app = builder.Build();
+    app.UseCors(AllowSpecificOrigins);
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCustomErrorHandlingMiddleware();
